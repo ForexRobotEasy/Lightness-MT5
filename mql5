@@ -1,0 +1,80 @@
+
+//+------------------------------------------------------------------+
+//|                                            Lightness MT5         |
+//|                                         Developer's Site: forexroboteasy.com |
+//|                                      Development by: Forex Robot Easy Team |
+//+------------------------------------------------------------------+
+
+//--- Include necessary libraries
+#include <Trade\Trade.mqh>
+#include <Expert\Expert.mqh>
+#include <Indicators\Trend.mqh>
+
+//--- Define global variables
+CTrade trade; // Trade class object
+CTrend trend; // Trend indicator class object
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    //--- Set EA parameters
+    trade.SetExpertMagicNumber(123456); // Set magic number for trade operations
+    trade.SetExpertStopLoss(50); // Set stop loss value in pips
+    trade.SetExpertTakeProfit(100); // Set take profit value in pips
+    
+    //--- Apply trend indicator settings
+    trend.SetPeriod(14); // Set period for calculating trend
+    trend.SetMethod(MODE_SMA); // Set method for calculating trend
+    
+    return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+    //--- Perform any necessary cleanup here
+}
+
+//+------------------------------------------------------------------+
+//| Expert start function                                            |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    //--- Check if AUDCAD is trending
+    double audcadTrend = trend.iCustom(_Symbol, PERIOD_CURRENT, 'AUDCAD', 0, 0);
+    if(audcadTrend == TREND_UP)
+    {
+        //--- Enter a long trade on AUDCAD
+        trade.Buy(_Symbol, 0.1, 0, 0, 'AUDCAD Trend');
+    }
+    else if(audcadTrend == TREND_DOWN)
+    {
+        //--- Enter a short trade on AUDCAD
+        trade.Sell(_Symbol, 0.1, 0, 0, 'AUDCAD Trend');
+    }
+    
+    //--- Check if CADCHF is trending
+    double cadchfTrend = trend.iCustom(_Symbol, PERIOD_CURRENT, 'CADCHF', 0, 0);
+    if(cadchfTrend == TREND_UP)
+    {
+        //--- Enter a long trade on CADCHF
+        trade.Buy(_Symbol, 0.1, 0, 0, 'CADCHF Trend');
+    }
+    else if(cadchfTrend == TREND_DOWN)
+    {
+        //--- Enter a short trade on CADCHF
+        trade.Sell(_Symbol, 0.1, 0, 0, 'CADCHF Trend');
+    }
+}
+
+//+------------------------------------------------------------------+
+//| Expert stop function                                             |
+//+------------------------------------------------------------------+
+void OnStop()
+{
+    //--- Perform any necessary actions before the EA stops
+}
